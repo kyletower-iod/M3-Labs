@@ -6,6 +6,20 @@ Welcome to the JS Fundamentals Lab! These exercises are designed to test your un
 
 ## 1. Type Coercion
 
+**Concept Introduction**: JavaScript automatically converts values between types during operations. This implicit conversion (type coercion) can lead to unexpected results. Understanding coercion rules is crucial for writing predictable code and avoiding bugs.
+
+**Common Mistakes**:
+
+- Assuming `+` always performs mathematical addition (it concatenates strings)
+- Forgetting that `undefined` in arithmetic operations results in `NaN`
+- Not knowing that `null` converts to `0` in numeric contexts
+
+**Debugging Tips**:
+
+- Use `typeof` operator to check variable types: `typeof variable`
+- Use `Number()` and `String()` functions for explicit conversion
+- Test edge cases with `null`, `undefined`, and empty strings
+
 Predict the result of each expression below, then verify your answer by running the code in the browser console.
 
 ```javascript
@@ -24,11 +38,50 @@ undefined + 1;
 " \t \n" - 2;
 ```
 
+**Expected Outputs**:
+
+```javascript
+"" + 1 + 0; // "10"
+true + false; // 1
+6 / "3"; // 2
+"2" * "3"; // 6
+4 + 5 + "px"; // "9px"
+"$" + 4 + 5; // "$45"
+"4" - 2; // 2
+"4px" - 2; // NaN
+"  -9  " + 5; // "  -9  5"
+"  -9  " - 5; // -14
+null + 1; // 1
+undefined + 1; // NaN
+" \t \n" - 2; // -2
+```
+
 **Bonus:** What is the result of `undefined == null`? What about `undefined === null`? Why?
+
+**Expected Bonus Outputs**:
+
+```javascript
+undefined == null; // true (loose equality converts types)
+undefined === null; // false (strict equality checks both type and value)
+```
 
 ---
 
 ## 2. String vs. Number Operations
+
+**Concept Introduction**: JavaScript uses different rules for arithmetic vs. comparison operations. The `+` operator performs concatenation when either operand is a string, while `-`, `*`, and `/` attempt to convert strings to numbers. Comparisons also have their own type coercion rules.
+
+**Common Mistakes**:
+
+- Forgetting that string concatenation has higher precedence than addition
+- Assuming all string-to-number conversions succeed (invalid strings become `NaN`)
+- Not understanding how comparison operators handle different types
+
+**Debugging Tips**:
+
+- Use `parseInt()` and `parseFloat()` for explicit string-to-number conversion
+- Check for `NaN` using `isNaN()` function
+- Remember that lexical string comparison differs from numeric comparison
 
 The following code block has some unexpected results and a syntax error.
 
@@ -59,9 +112,39 @@ console.log(lessThan1);
 console.log(lessThan2);
 ```
 
+**Expected Outputs**:
+
+```javascript
+let addition = three + four; // "34" (string concatenation)
+let multiplication = three * four; // 12 (numeric multiplication)
+let division = three / four; // 0.75 (numeric division)
+let subtraction = three - four; // -1 (numeric subtraction)
+let lessThan1 = three < four; // true (numeric comparison)
+let lessThan2 = thirty < four; // false (numeric: 30 < 4)
+```
+
+**Explanation**:
+
+- `addition` results in "34" because `+` concatenates strings
+- `lessThan2` is false because "30" converts to number 30, which is not less than 4
+
 ---
 
 ## 3. Truthy and Falsy Values
+
+**Concept Introduction**: In JavaScript, every value can be evaluated as either "truthy" or "falsy" in boolean contexts. Only six values are falsy: `false`, `0`, `""` (empty string), `null`, `undefined`, and `NaN`. All other values, including empty objects and arrays, are truthy.
+
+**Common Mistakes**:
+
+- Assuming `"0"` or `"false"` are falsy (they're truthy strings)
+- Forgetting that empty objects `{}` and arrays `[]` are truthy
+- Confusing falsy values with the boolean `false`
+
+**Debugging Tips**:
+
+- Use `Boolean()` function to test truthiness: `Boolean(value)`
+- Use `!!value` as a quick way to convert to boolean
+- Remember that only the six specific falsy values evaluate to false
 
 For each `if` statement below, predict whether the message will be logged to the console. Explain your reasoning for each.
 
@@ -87,16 +170,40 @@ if (1) {
 }
 ```
 
+**Expected Outputs**:
+
+```javascript
+// #1: zero is true - NOT logged (0 is falsy)
+// #2: zero string is true - LOGGED ("0" is truthy)
+// #3: null is true - NOT logged (null is falsy)
+// #4: negative is true - LOGGED (-1 is truthy)
+// #5: positive is true - LOGGED (1 is truthy)
+```
+
 ---
 
 ## 4. The Ternary Operator
+
+**Concept Introduction**: The ternary operator (`condition ? valueIfTrue : valueIfFalse`) is a concise alternative to if/else statements. It's particularly useful for conditional assignments and inline expressions. The `+=` operator is a compound assignment operator that adds to a variable and reassigns the result.
+
+**Common Mistakes**:
+
+- Making ternary expressions too complex and hard to read
+- Forgetting that ternary expressions return values (unlike if statements)
+- Not using parentheses for complex conditions, leading to confusion
+
+**Debugging Tips**:
+
+- Break complex ternary chains into multiple lines for readability
+- Use if/else for complex logic with multiple statements
+- Test the condition separately if the ternary isn't working as expected
 
 ### Your Tasks
 
 1. Rewrite the `if/else` statement below using a single line of code with the ternary operator.
 2. In your own words, explain what the `+=` operator does.
 
-```javascript
+````javascript
 let a = 2,
   b = 3;
 let result = `The sum of ${a} and ${b} is `;
@@ -107,18 +214,40 @@ if (a + b < 10) {
   result += "greater than 10";
 }
 
-console.log(result);
+**Expected Output**:
+```javascript
+// Original result: "The sum of 2 and 3 is less than 10"
+````
+
+**Ternary Solution**:
+
+```javascript
+let result = `The sum of ${a} and ${b} is ${a + b < 10 ? "less than 10" : "greater than 10"}`;
 ```
 
 ---
 
 ## 5. Function Syntax
 
+**Concept Introduction**: JavaScript offers multiple ways to define functions, each with different characteristics. Function declarations are hoisted, function expressions are not, and arrow functions have special `this` binding rules. Understanding these differences is essential for modern JavaScript development.
+
+**Common Mistakes**:
+
+- Confusing function declarations with function expressions
+- Not understanding arrow function `this` binding differences
+- Forgetting semicolons after function expressions
+
+**Debugging Tips**:
+
+- Check if functions are hoisted (available before declaration)
+- Test `this` context in different function types
+- Use console.log to verify function execution
+
 The `getGreeting` function is a classic function declaration. Rewrite it in two other common ways:
 a) As a **function expression**.
 b) As an **arrow function**.
 
-```javascript
+````javascript
 // Original function declaration
 function getGreeting(name) {
   return `Hello, ${name}!`;
@@ -130,12 +259,43 @@ function getGreeting(name) {
 // b) Arrow function syntax
 // const getGreetingArrow = ...
 
-console.log(getGreeting("World"));
+**Expected Outputs**:
+```javascript
+// All three should produce: "Hello, World!"
+console.log(getGreeting("World"));        // "Hello, World!"
+console.log(getGreetingExpression("World")); // "Hello, World!"
+console.log(getGreetingArrow("World"));     // "Hello, World!"
+````
+
+**Solutions**:
+
+```javascript
+// a) Function expression syntax
+const getGreetingExpression = function (name) {
+  return `Hello, ${name}!`;
+};
+
+// b) Arrow function syntax
+const getGreetingArrow = (name) => `Hello, ${name}!`;
 ```
 
 ---
 
 ## 6. Objects and `this`
+
+**Concept Introduction**: Objects are JavaScript's fundamental data structures for grouping related data and behavior. The `this` keyword refers to the context in which a function is called, which can vary based on how the method is invoked. Understanding `this` binding is crucial for object-oriented programming in JavaScript.
+
+**Common Mistakes**:
+
+- Losing `this` context when passing methods as callbacks
+- Confusing object properties with variables
+- Not understanding how arrow functions handle `this` differently
+
+**Debugging Tips**:
+
+- Use `console.log(this)` to check current context
+- Remember that method calls determine `this` binding
+- Arrow functions inherit `this` from their enclosing scope
 
 This exercise involves completing an object that represents a character from _The Princess Bride_.
 
@@ -177,6 +337,20 @@ inigo.greeting(rugen);
 ---
 
 ## 7. Method Chaining
+
+**Concept Introduction**: Method chaining is a programming pattern where multiple methods are called on the same object in a single statement. This is achieved by having each method return `this` (the object itself), allowing subsequent methods to be called on the returned object. This pattern is commonly used in JavaScript libraries and frameworks.
+
+**Common Mistakes**:
+
+- Forgetting to return `this` from methods that should be chainable
+- Confusing method chaining with promise chaining (different concepts)
+- Not understanding when chaining improves vs. hurts readability
+
+**Debugging Tips**:
+
+- Log `this` inside methods to verify you're returning the correct object
+- Break chains into separate lines to identify which method fails
+- Remember that only methods returning `this` can be chained
 
 The `basketballGame` object tracks the score of a game.
 
@@ -287,3 +461,7 @@ function Person(name, age) {
 ## Bonus Challenge
 
 If you have time, test your skills with the **JS Challenger Rush** game: [https://www.jschallenger.com/games/rush](https://www.jschallenger.com/games/rush)
+
+```
+
+```
