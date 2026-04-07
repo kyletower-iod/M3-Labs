@@ -14,7 +14,7 @@ Follow these steps to complete and submit your work.
 
 1. **Create a `dev` Branch:** Open your terminal in the project folder and run `git checkout -b dev` to create and switch to a new branch for your work.
 2. **Complete the Lab:** Edit the `lab.js` file to complete all the functions as described below.
-3. **Test Your Work:** Run `npm test` in your terminal to see which exercises are passing and which need more work.
+3. **Test Your Work:** Run `npm run test` in your terminal to see which exercises are passing and which need more work.
 4. **Add and Commit:** When you are ready, stage and commit your changes with the commands `git add .` and `git commit -m "Complete lab 2 exercises"`.
 5. **Push Your Branch:** Push your work to your remote repository with `git push -u origin dev`.
 6. **Open a Pull Request:** On your GitHub repository page, open a pull request to merge your `dev` branch into your `main` branch.
