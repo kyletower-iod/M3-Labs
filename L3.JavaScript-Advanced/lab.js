@@ -15,6 +15,12 @@
  */
 function makeCounter(startFrom = 0, incrementBy = 1) {
   // Your code here
+  let count = startFrom;
+
+  return function () {
+    count += incrementBy;
+    return count;
+  };
 }
 
 /**
@@ -24,6 +30,7 @@ function makeCounter(startFrom = 0, incrementBy = 1) {
  * delayMsg("Hello World"); // Logs: "This message will be printed after a delay: Hello World"
  * delayMsg("Test message"); // Logs: "This message will be printed after a delay: Test message"
  */
+
 function delayMsg(msg) {
   console.log(`This message will be printed after a delay: ${msg}`);
 }
@@ -36,8 +43,15 @@ function delayMsg(msg) {
  * // After the test setTimeout calls complete:
  * getOrder(); // returns ["#3: Delayed by 0ms", "#2: Delayed by 20ms", "#1: Delayed by 100ms", "#4: Not delayed at all"]
  */
+
 function getOrder() {
   // Your code here. Return an array of strings.
+  return [
+    "#4: Not delayed at all",
+    "#3: Delayed by 0ms",
+    "#2: Delayed by 20ms",
+    "#1: Delayed by 100ms",
+  ];
 }
 
 /**
@@ -54,6 +68,12 @@ function getOrder() {
  */
 function debounce(func, ms) {
   // Your code here
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    const ctx = this;
+    timer = setTimeout(() => func.apply(ctx, args), ms);
+  };
 }
 
 /**
@@ -66,6 +86,26 @@ function debounce(func, ms) {
  */
 function printFibonacci(limit) {
   // Your code here
+  if (limit <= 0) return;
+
+  let a = 0;
+  let b = 1;
+  let count = 0;
+
+  console.log(a);
+  count++;
+
+  if (count >= limit) return;
+
+  const timer = setInterval(() => {
+    [a, b] = [b, a + b];
+    console.log(a);
+    count++;
+
+    if (count >= limit) {
+      clearInterval(timer);
+    }
+  }, 1000);
 }
 
 /**
@@ -99,8 +139,9 @@ const car = {
  * const anotherBound = fixCar();
  * anotherBound(); // Each counter is independent
  */
-function fixCar() {
+function fixCar(car) {
   // Your code here
+  return car.description.bind(car);
 }
 
 /**
@@ -111,6 +152,12 @@ function fixCar() {
  */
 Function.prototype.delay = function (ms) {
   // Your code here
+  const fn = this;
+  return function (...args) {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(fn.apply(this, args)), ms);
+    });
+  };
 };
 
 /**
@@ -171,6 +218,15 @@ class DigitalClock {
  */
 class PrecisionClock extends DigitalClock {
   // Your code here
+  constructor(prefix, precision = 1000) {
+    super(prefix);
+    this.precision = precision;
+  }
+
+  start() {
+    this.display();
+    this.timer = setInterval(() => this.display(), this.precision);
+  }
 }
 
 /**
@@ -186,6 +242,29 @@ class PrecisionClock extends DigitalClock {
  */
 class AlarmClock extends DigitalClock {
   // Your code here
+  constructor(prefix, wakeupTime) {
+    super(prefix);
+    this.wakeupTime = wakeupTime;
+  }
+
+  start() {
+    this.display();
+    this.checkAlarm();
+    this.timer = setInterval(() => {
+      this.display();
+      this.checkAlarm();
+    }, 1000);
+  }
+
+  checkAlarm() {
+    const now = new Date();
+    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    if (currentTime === this.wakeupTime) {
+      console.log("Wake Up!");
+      this.stop();
+    }
+  }
 }
 
 /**
@@ -204,6 +283,12 @@ function validateStringArgs(fn) {
   return function (...args) {
     // The student's validation and function-calling logic goes here.
     // To start, this function does nothing, so it will fail the tests.
+    for (const arg of args) {
+      if (typeof arg !== "string") {
+        throw new TypeError(`Argument ${arg} is not a string`);
+      }
+    }
+    return fn.apply(this, args);
   };
 }
 
@@ -219,6 +304,16 @@ function validateStringArgs(fn) {
  */
 function randomDelay() {
   // Your code here
+  const delaySeconds = Math.floor(Math.random() * 10) + 1;
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (delaySeconds % 2 === 0) {
+        resolve("Resolved!");
+      } else {
+        reject("Rejected!");
+      }
+    }, delaySeconds * 1000);
+  });
 }
 
 /**
@@ -238,6 +333,11 @@ const fetch = require("node-fetch");
 
 async function fetchURLDataAsync(url) {
   // Your code here
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`HTTP error ${res.status}`);
+  }
+  return await res.json();
 }
 
 // Do not modify this line.
